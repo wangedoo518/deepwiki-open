@@ -7,8 +7,8 @@
     },
     "batch_size": 10,
     "model_kwargs": {
-      "model": "text-embedding-v3",
-      "dimensions": 256,
+      "model": "text-embedding-v4",
+      "dimensions": 1024,
       "encoding_format": "float"
     }
   },

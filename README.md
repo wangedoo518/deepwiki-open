@@ -251,6 +251,11 @@ If you want to use embedding models compatible with the OpenAI API (such as Alib
    OPENAI_API_KEY=your_api_key
    OPENAI_API_BASE_URL=your_openai_compatible_endpoint
    ```
+   For the Qwen3 Embedding models from Alibaba (such as `text-embedding-v4`), set `OPENAI_API_BASE_URL` to the DashScope embedding endpoint, for example:
+   ```
+   OPENAI_API_BASE_URL=https://dashscope.aliyuncs.com/api/v1/services/aigc/text-embedding
+   ```
+   Then update `api/config/embedder_openai_compatible.json` so the `model` field is `"text-embedding-v4"`.
 3. The program will automatically substitute placeholders in embedder.json with the values from your environment variables.
 
 This allows you to seamlessly switch to any OpenAI-compatible embedding service without code changes.

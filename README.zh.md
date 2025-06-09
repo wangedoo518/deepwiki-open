@@ -379,6 +379,11 @@ OpenAI 客户端的 base_url 配置主要为拥有私有 API 渠道的企业用�
    OPENAI_API_KEY=你的_api_key
    OPENAI_API_BASE_URL=你的_openai_兼容接口地址
    ```
+   如果你要使用阿里巴巴的 Qwen3 Embedding 系列（如 `text-embedding-v4`），`OPENAI_API_BASE_URL` 应设置为 DashScope 的向量化接口，例如：
+   ```
+   OPENAI_API_BASE_URL=https://dashscope.aliyuncs.com/api/v1/services/aigc/text-embedding
+   ```
+   然后将 `api/config/embedder_openai_compatible.json` 中的 `model` 字段改为 `"text-embedding-v4"`。
 3. 程序会自动用环境变量的值替换 embedder.json 里的占位符。
 
 这样即可无缝切换到 OpenAI 兼容的 embedding 服务，无需修改代码。
