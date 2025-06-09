@@ -39,6 +39,7 @@ cd deepwiki-open
 # 创建包含API密钥的.env文件
 echo "GOOGLE_API_KEY=your_google_api_key" > .env
 echo "OPENAI_API_KEY=your_openai_api_key" >> .env
+DASHSCOPE_API_KEY=your_dashscope_api_key # DashScope(Qwen)模型必需
 # 可选：如果您想使用OpenRouter模型，添加OpenRouter API密钥
 echo "OPENROUTER_API_KEY=your_openrouter_api_key" >> .env
 
@@ -66,6 +67,7 @@ docker-compose up
 ```
 GOOGLE_API_KEY=your_google_api_key
 OPENAI_API_KEY=your_openai_api_key
+DASHSCOPE_API_KEY=your_dashscope_api_key # DashScope(Qwen)模型必需
 # 可选：如果您想使用OpenRouter模型，添加此项
 OPENROUTER_API_KEY=your_openrouter_api_key
 ```
@@ -269,6 +271,7 @@ DeepWiki 现在实现了灵活的基于提供者的模型选择系统，支持�
 # API 密钥
 GOOGLE_API_KEY=你的谷歌API密钥        # 使用 Google Gemini 模型必需
 OPENAI_API_KEY=你的OpenAI密钥        # 使用 OpenAI 模型必需
+DASHSCOPE_API_KEY=你的DashScope密钥 # 使用 Qwen 模型必需
 OPENROUTER_API_KEY=你的OpenRouter密钥 # 使用 OpenRouter 模型必需
 
 # OpenAI API 基础 URL 配置
@@ -303,6 +306,7 @@ OpenAI 客户端的 base_url 配置主要为拥有私有 API 渠道的企业用�
 # API密钥
 GOOGLE_API_KEY=your_google_api_key        # Google Gemini模型必需
 OPENAI_API_KEY=your_openai_api_key        # OpenAI模型必需
+DASHSCOPE_API_KEY=your_dashscope_api_key # DashScope(Qwen)模型必需
 OPENROUTER_API_KEY=your_openrouter_api_key # OpenRouter模型必需
 
 # OpenAI API基础URL配置
@@ -381,9 +385,29 @@ OpenAI 客户端的 base_url 配置主要为拥有私有 API 渠道的企业用�
    ```
    如果你要使用阿里巴巴的 Qwen3 Embedding 系列（如 `text-embedding-v4`），`OPENAI_API_BASE_URL` 应设置为 DashScope 的向量化接口，例如：
    ```
-   OPENAI_API_BASE_URL=https://dashscope.aliyuncs.com/api/v1/services/aigc/text-embedding
+   OPENAI_API_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
    ```
    然后将 `api/config/embedder_openai_compatible.json` 中的 `model` 字段改为 `"text-embedding-v4"`。
+
+   使用 OpenAI Python SDK 的示例：
+   ```python
+   import os
+   from openai import OpenAI
+
+   client = OpenAI(
+       api_key=os.getenv("OPENAI_API_KEY"),  # 你的 DashScope API 密钥
+       base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
+   )
+
+   embedding = client.embeddings.create(
+       model="text-embedding-v4",
+       input="示例文本",
+       dimensions=1024,
+       encoding_format="float"
+   )
+
+   print(embedding.model_dump_json())
+   ```
 3. 程序会自动用环境变量的值替换 embedder.json 里的占位符。
 
 这样即可无缝切换到 OpenAI 兼容的 embedding 服务，无需修改代码。
