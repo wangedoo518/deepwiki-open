@@ -290,6 +290,7 @@ DeepWiki는 이제 여러 LLM 제공자를 지원하는 유연한 제공자 기�
 
 - **Google**: 기본값 `gemini-2.0-flash`, 또한 `gemini-1.5-flash`, `gemini-1.0-pro` 등도 지원
 - **OpenAI**: 기본값 `gpt-4o`, 또한 `o4-mini` 등도 지원
+- **Qwen**(알리바바 천문): 기본값 `qwen-turbo`이며 DashScope API를 통해 `qwen-plus`, `qwen-max`도 사용 가능
 - **OpenRouter**: Claude, Llama, Mistral 등 통합 API를 통해 다양한 모델 접근 가능
 - **Ollama**: `llama3`와 같은 로컬에서 실행되는 오픈소스 모델 지원
 

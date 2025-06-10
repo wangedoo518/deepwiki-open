@@ -178,6 +178,7 @@ O DeepWiki agora implementa um sistema flexível de seleção de modelos baseado
 
 - **Google**: Padrão `gemini-2.0-flash`, também suporta `gemini-1.5-flash`, `gemini-1.0-pro`, etc.
 - **OpenAI**: Padrão `gpt-4o`, também suporta `o4-mini`, etc.
+- **Qwen**: Padrão `qwen-turbo`, também suporta `qwen-plus` e `qwen-max` via API DashScope.
 - **OpenRouter**: Acesso a múltiplos modelos via uma API unificada, incluindo Claude, Llama, Mistral, etc.
 - **Ollama**: Suporte para modelos de código aberto executados localmente como `llama3`
 

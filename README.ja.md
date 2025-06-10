@@ -301,6 +301,7 @@ DeepWikiでは、複数のLLMプロバイダーをサポートする柔軟なプ
 
 - **Google**: デフォルトは `gemini-2.0-flash`、また `gemini-1.5-flash`、`gemini-1.0-pro` などもサポート
 - **OpenAI**: デフォルトは `gpt-4o`、また `o4-mini` などもサポート
+- **Qwen**（阿里千問）: デフォルトは `qwen-turbo` で、DashScope API を通じて `qwen-plus` と `qwen-max` も利用可能
 - **OpenRouter**: Claude、Llama、Mistralなど、統一APIを通じて複数のモデルにアクセス
 - **Ollama**: `llama3` などのローカルで実行するオープンソースモデルをサポート
 

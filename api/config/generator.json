@@ -94,6 +94,14 @@
         "qwen-turbo": {
           "temperature": 0.7,
           "top_p": 0.8
+        },
+        "qwen-plus": {
+          "temperature": 0.7,
+          "top_p": 0.8
+        },
+        "qwen-max": {
+          "temperature": 0.7,
+          "top_p": 0.8
         }
       }
     },
