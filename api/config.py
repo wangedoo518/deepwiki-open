@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 from api.openai_client import OpenAIClient
 from api.openrouter_client import OpenRouterClient
 from api.bedrock_client import BedrockClient
+from api.qwen_client import QwenClient
 from adalflow import GoogleGenAIClient, OllamaClient
 
 # Get API keys from environment variables
@@ -49,6 +50,7 @@ CONFIG_DIR = os.environ.get('DEEPWIKI_CONFIG_DIR', None)
 CLIENT_CLASSES = {
     "GoogleGenAIClient": GoogleGenAIClient,
     "OpenAIClient": OpenAIClient,
+    "QwenClient": QwenClient,
     "OpenRouterClient": OpenRouterClient,
     "OllamaClient": OllamaClient,
     "BedrockClient": BedrockClient
