@@ -25,7 +25,7 @@
 - **Easy Navigation**: Simple, intuitive interface to explore the wiki
 - **Ask Feature**: Chat with your repository using RAG-powered AI to get accurate answers
 - **DeepResearch**: Multi-turn research process that thoroughly investigates complex topics
-- **Multiple Model Providers**: Support for Google Gemini, OpenAI, OpenRouter, and local Ollama models
+- **Multiple Model Providers**: Support for Google Gemini, OpenAI, Qwen (DashScope), OpenRouter, and local Ollama models
 
 ## 🚀 Quick Start (Super Easy!)
 
@@ -40,6 +40,7 @@ cd deepwiki-open
 echo "GOOGLE_API_KEY=your_google_api_key" > .env
 echo "OPENAI_API_KEY=your_openai_api_key" >> .env
 echo "DASHSCOPE_API_KEY=your_dashscope_api_key" >> .env
+echo "DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1" >> .env
 # Optional: Add OpenRouter API key if you want to use OpenRouter models
 echo "OPENROUTER_API_KEY=your_openrouter_api_key" >> .env
 # Optional: Add Ollama host if not local. defaults to http://localhost:11434
@@ -65,6 +66,7 @@ Create a `.env` file in the project root with these keys:
 GOOGLE_API_KEY=your_google_api_key
 OPENAI_API_KEY=your_openai_api_key
 DASHSCOPE_API_KEY=your_dashscope_api_key
+echo "DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1" >> .env
 # Optional: Add this if you want to use OpenRouter models
 OPENROUTER_API_KEY=your_openrouter_api_key
 # Optional: Add Ollama host if not local. default: http://localhost:11434
@@ -192,6 +194,7 @@ Each provider requires its corresponding API key environment variables:
 GOOGLE_API_KEY=your_google_api_key        # Required for Google Gemini models
 OPENAI_API_KEY=your_openai_api_key        # Required for OpenAI models
 DASHSCOPE_API_KEY=your_dashscope_api_key
+echo "DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1" >> .env
 OPENROUTER_API_KEY=your_openrouter_api_key # Required for OpenRouter models
 
 # OpenAI API Base URL Configuration
@@ -327,6 +330,7 @@ docker-compose up
 |----------------------|--------------------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------|
 | `GOOGLE_API_KEY`     | Google Gemini API key for AI generation                      | No | Required only if you want to use Google Gemini models                                                    
 | `DASHSCOPE_API_KEY`  | Alibaba DashScope API key for Qwen embeddings    | No | Required if `OPENAI_API_BASE_URL` points to DashScope |
+| `DASHSCOPE_BASE_URL` | DashScope API base URL (default: https://dashscope.aliyuncs.com/compatible-mode/v1) | No | Override if using a custom endpoint |
 | `OPENROUTER_API_KEY` | OpenRouter API key for alternative models                    | No | Required only if you want to use OpenRouter models                                                       |
 | `OLLAMA_HOST`        | Ollama Host (default: http://localhost:11434)                | No | Required only if you want to use external Ollama server                                                  |
 | `PORT`               | Port for the API server (default: 8001)                      | No | If you host API and frontend on the same machine, make sure change port of `SERVER_BASE_URL` accordingly |
@@ -361,6 +365,7 @@ docker run -p 8001:8001 -p 3000:3000 \
   -e GOOGLE_API_KEY=your_google_api_key \
   -e OPENAI_API_KEY=your_openai_api_key \
   -e DASHSCOPE_API_KEY=your_dashscope_api_key \
+echo "DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1" >> .env
   -e OPENROUTER_API_KEY=your_openrouter_api_key \
   -e OLLAMA_HOST=your_ollama_host \
   -v ~/.adalflow:/root/.adalflow \
@@ -392,6 +397,7 @@ You can also mount a .env file to the container:
 echo "GOOGLE_API_KEY=your_google_api_key" > .env
 echo "OPENAI_API_KEY=your_openai_api_key" >> .env
 echo "DASHSCOPE_API_KEY=your_dashscope_api_key" >> .env
+echo "DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1" >> .env
 echo "OPENROUTER_API_KEY=your_openrouter_api_key" >> .env
 echo "OLLAMA_HOST=your_ollama_host" >> .env
 
@@ -426,6 +432,7 @@ docker run -p 8001:8001 -p 3000:3000 \
   -e GOOGLE_API_KEY=your_google_api_key \
   -e OPENAI_API_KEY=your_openai_api_key \
   -e DASHSCOPE_API_KEY=your_dashscope_api_key \
+echo "DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1" >> .env
   -e OPENROUTER_API_KEY=your_openrouter_api_key \
   -e OLLAMA_HOST=your_ollama_host \
   deepwiki-open

@@ -25,7 +25,7 @@
 - **简易导航**：简单、直观的界面探索Wiki
 - **提问功能**：使用RAG驱动的AI与您的仓库聊天，获取准确答案
 - **深度研究**：多轮研究过程，彻底调查复杂主题
-- **多模型提供商**：支持Google Gemini、OpenAI、OpenRouter和本地Ollama模型
+- **多模型提供商**：支持Google Gemini、OpenAI、Qwen（DashScope）、OpenRouter和本地Ollama模型
 
 ## 🚀 快速开始（超级简单！）
 
@@ -40,11 +40,7 @@ cd deepwiki-open
 echo "GOOGLE_API_KEY=your_google_api_key" > .env
 echo "OPENAI_API_KEY=your_openai_api_key" >> .env
 DASHSCOPE_API_KEY=your_dashscope_api_key # DashScope(Qwen)模型必需
-# 可选：如果您想使用OpenRouter模型，添加OpenRouter API密钥
-echo "OPENROUTER_API_KEY=your_openrouter_api_key" >> .env
-
-# 使用Docker Compose运行
-docker-compose up
+DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1 # 可选，可自定义Qwen接口地址
 ```
 
 (上述 Docker 命令以及 `docker-compose.yml` 配置会挂载您主机上的 `~/.adalflow` 目录到容器内的 `/root/.adalflow`。此路径用于存储：
@@ -69,6 +65,7 @@ GOOGLE_API_KEY=your_google_api_key
 OPENAI_API_KEY=your_openai_api_key
 DASHSCOPE_API_KEY=your_dashscope_api_key # DashScope(Qwen)模型必需
 # 可选：如果您想使用OpenRouter模型，添加此项
+DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1 # 可选，可自定义Qwen接口地址
 OPENROUTER_API_KEY=your_openrouter_api_key
 ```
 
@@ -307,6 +304,7 @@ OpenAI 客户端的 base_url 配置主要为拥有私有 API 渠道的企业用�
 GOOGLE_API_KEY=your_google_api_key        # Google Gemini模型必需
 OPENAI_API_KEY=your_openai_api_key        # OpenAI模型必需
 DASHSCOPE_API_KEY=your_dashscope_api_key # DashScope(Qwen)模型必需
+DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1 # 可选，可自定义Qwen接口地址
 OPENROUTER_API_KEY=your_openrouter_api_key # OpenRouter模型必需
 
 # OpenAI API基础URL配置

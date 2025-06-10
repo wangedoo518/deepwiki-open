@@ -86,6 +86,17 @@
         }
       }
     },
+    "qwen": {
+      "client_class": "QwenClient",
+      "default_model": "qwen-turbo",
+      "supportsCustomModel": true,
+      "models": {
+        "qwen-turbo": {
+          "temperature": 0.7,
+          "top_p": 0.8
+        }
+      }
+    },
     "ollama": {
       "default_model": "qwen3:1.7b",
       "supportsCustomModel": true,
