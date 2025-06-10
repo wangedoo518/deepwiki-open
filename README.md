@@ -182,6 +182,7 @@ DeepWiki now implements a flexible provider-based model selection system support
 
 - **Google**: Default `gemini-2.0-flash`, also supports `gemini-1.5-flash`, `gemini-1.0-pro`, etc.
 - **OpenAI**: Default `gpt-4o`, also supports `o4-mini`, etc.
+- **Qwen**: Default `qwen-turbo`, also supports `qwen-plus` and `qwen-max` via the DashScope API.
 - **OpenRouter**: Access to multiple models via a unified API, including Claude, Llama, Mistral, etc.
 - **Ollama**: Support for locally running open-source models like `llama3`
 

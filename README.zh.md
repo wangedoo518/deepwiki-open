@@ -257,6 +257,7 @@ DeepWiki 现在实现了灵活的基于提供者的模型选择系统，支持�
 
 - **Google**: 默认使用 `gemini-2.0-flash`，还支持 `gemini-1.5-flash`、`gemini-1.0-pro` 等
 - **OpenAI**: 默认使用 `gpt-4o`，还支持 `o4-mini` 等
+- **Qwen**（阿里千问）: 默认 `qwen-turbo`，还支持 `qwen-plus`、`qwen-max`，通过 DashScope API 调用
 - **OpenRouter**: 通过统一 API 访问多种模型，包括 Claude、Llama、Mistral 等
 - **Ollama**: 支持本地运行的开源模型，如 `llama3`
 

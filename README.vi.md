@@ -253,6 +253,7 @@ DeepWiki hiện đã triển khai một hệ thống lựa chọn mô hình linh
 
 - **Google**: Mặc định là `gemini-2.0-flash`, cũng hỗ trợ `gemini-1.5-flash`, `gemini-1.0-pro`, v.v.
 - **OpenAI**: Mặc định là `gpt-4o`, cũng hỗ trợ `o4-mini`, v.v.
+- **Qwen**: Mặc định `qwen-turbo`, ngoài ra còn hỗ trợ `qwen-plus` và `qwen-max` thông qua API DashScope.
 - **OpenRouter**: Truy cập nhiều mô hình qua một API thống nhất, bao gồm Claude, Llama, Mistral, v.v.
 - **Ollama**: Hỗ trợ các mô hình mã nguồn mở chạy cục bộ như `llama3`
 
