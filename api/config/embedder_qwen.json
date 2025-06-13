@@ -1,0 +1,23 @@
+{
+  "embedder": {
+    "client_class": "QwenClient",
+    "initialize_kwargs": {
+      "api_key": "${DASHSCOPE_API_KEY}",
+      "base_url": "${DASHSCOPE_BASE_URL}"
+    },
+    "batch_size": 10,
+    "model_kwargs": {
+      "model": "text-embedding-v4",
+      "dimensions": 1024,
+      "encoding_format": "float"
+    }
+  },
+  "retriever": {
+    "top_k": 20
+  },
+  "text_splitter": {
+    "split_by": "word",
+    "chunk_size": 350,
+    "chunk_overlap": 100
+  }
+}
