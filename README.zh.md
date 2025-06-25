@@ -1,4 +1,4 @@
-# DeepWiki-Open
+# DeepWiki-Open-Pro
 
 ![DeepWiki 横幅](screenshots/Deepwiki.png)
 
