@@ -503,17 +503,16 @@ class DashscopeClient(ModelClient):
             self.async_client = self.init_async_client()
 
         if model_type == ModelType.LLM:
-            if not api_kwargs.get("stream", False):
+            if api_kwargs.get("stream", False):
+                completion = await self.async_client.chat.completions.create(**api_kwargs)
+                return completion  # return the async stream
+            else:
                 # For non-streaming, enable_thinking must be false.
                 extra_body = api_kwargs.get("extra_body", {})
                 extra_body["enable_thinking"] = False
                 api_kwargs["extra_body"] = extra_body
 
-            completion = await self.async_client.chat.completions.create(**api_kwargs)
-
-            if api_kwargs.get("stream", False):
-                return handle_streaming_response(completion)
-            else:
+                completion = await self.async_client.chat.completions.create(**api_kwargs)
                 return self.parse_chat_completion(completion)
         elif model_type == ModelType.EMBEDDER:
             # Extract input texts from api_kwargs
