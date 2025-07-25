@@ -717,12 +717,13 @@ This file contains...
                     )
                     # Handle streaming response from Dashscope
                     async for chunk in response:
-                        text = (
-                            chunk
-                            if isinstance(chunk, str)
-                            else getattr(chunk, "text", str(chunk))
-                        )
-                        await websocket.send_text(text)
+                        choices = getattr(chunk, "choices", [])
+                        if len(choices) > 0:
+                            delta = getattr(choices[0], "delta", None)
+                            if delta is not None:
+                                text = getattr(delta, "content", None)
+                                if text is not None:
+                                    await websocket.send_text(text)
                     # Explicitly close the WebSocket connection after the response is complete
                     await websocket.close()
                 except Exception as e_dashscope:
@@ -897,12 +898,13 @@ This file contains...
 
                             # Handle streaming fallback response from Dashscope
                             async for chunk in fallback_response:
-                                text = (
-                                    chunk
-                                    if isinstance(chunk, str)
-                                    else getattr(chunk, "text", str(chunk))
-                                )
-                                await websocket.send_text(text)
+                                choices = getattr(chunk, "choices", [])
+                                if len(choices) > 0:
+                                    delta = getattr(choices[0], "delta", None)
+                                    if delta is not None:
+                                        text = getattr(delta, "content", None)
+                                        if text is not None:
+                                            await websocket.send_text(text)
                         except Exception as e_fallback:
                             logger.error(
                                 f"Error with Dashscope API fallback: {str(e_fallback)}"
