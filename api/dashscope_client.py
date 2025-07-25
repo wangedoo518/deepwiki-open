@@ -164,11 +164,9 @@ class DashscopeClient(ModelClient):
         if not workspace_id:
             log.warning(f"Environment variable {self._env_workspace_id_name} not set. Some features may not work properly.")
         
-        # For Dashscope, we need to include the workspace ID in the base URL if provided
+        # For personal accounts, the workspace ID does not need to be appended
+        # to the base URL. Simply use the configured base URL as-is.
         base_url = self.base_url
-        if workspace_id:
-            # Add workspace ID to headers or URL as required by Dashscope
-            base_url = f"{self.base_url.rstrip('/')}"
         
         return api_key, workspace_id, base_url
 
@@ -325,14 +323,6 @@ class DashscopeClient(ModelClient):
                 **final_model_kwargs
             }
             
-            # Add workspace ID to headers if available
-            workspace_id = getattr(self.sync_client, '_workspace_id', None) or getattr(self.async_client, '_workspace_id', None)
-            if workspace_id:
-                # Dashscope may require workspace ID in headers
-                if 'extra_headers' not in api_kwargs:
-                    api_kwargs['extra_headers'] = {}
-                api_kwargs['extra_headers']['X-DashScope-WorkSpace'] = workspace_id
-            
             return api_kwargs
             
         elif model_type == ModelType.EMBEDDER:
@@ -365,13 +355,6 @@ class DashscopeClient(ModelClient):
                 "input": processed_input,
                 **final_model_kwargs
             }
-            
-            # Add workspace ID to headers if available
-            workspace_id = getattr(self.sync_client, '_workspace_id', None) or getattr(self.async_client, '_workspace_id', None)
-            if workspace_id:
-                if 'extra_headers' not in api_kwargs:
-                    api_kwargs['extra_headers'] = {}
-                api_kwargs['extra_headers']['X-DashScope-WorkSpace'] = workspace_id
             
             return api_kwargs
         else:
