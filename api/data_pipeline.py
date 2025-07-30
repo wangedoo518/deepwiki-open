@@ -1,5 +1,7 @@
 import adalflow as adal
 from adalflow.core.types import Document, List
+from itertools import islice
+from typing import Iterable
 from adalflow.components.data_process import TextSplitter, ToEmbeddings
 import os
 import subprocess
@@ -54,6 +56,15 @@ def count_tokens(text: str, is_ollama_embedder: bool = None) -> int:
         logger.warning(f"Error counting tokens with tiktoken: {e}")
         # Rough approximation: 4 characters per token
         return len(text) // 4
+
+def chunked(iterable: Iterable, n: int):
+    """Yield successive chunks from *iterable* of size *n*."""
+    iterator = iter(iterable)
+    while True:
+        chunk = list(islice(iterator, n))
+        if not chunk:
+            break
+        yield chunk
 
 def download_repo(repo_url: str, local_path: str, type: str = "github", access_token: str = None) -> str:
     """
@@ -148,9 +159,8 @@ def read_all_documents(path: str, is_ollama_embedder: bool = None, excluded_dirs
             When provided, only files matching these patterns will be processed.
 
     Returns:
-        list: A list of Document objects with metadata.
+        Generator: yields Document objects with metadata.
     """
-    documents = []
     # File extensions to look for, prioritizing code files
     code_extensions = [".py", ".js", ".ts", ".java", ".cpp", ".c", ".h", ".hpp", ".go", ".rs",
                        ".jsx", ".tsx", ".html", ".css", ".php", ".swift", ".cs"]
@@ -311,7 +321,7 @@ def read_all_documents(path: str, is_ollama_embedder: bool = None, excluded_dirs
                             "token_count": token_count,
                         },
                     )
-                    documents.append(doc)
+                    yield doc
             except Exception as e:
                 logger.error(f"Error reading {file_path}: {e}")
 
@@ -345,12 +355,11 @@ def read_all_documents(path: str, is_ollama_embedder: bool = None, excluded_dirs
                             "token_count": token_count,
                         },
                     )
-                    documents.append(doc)
+                    yield doc
             except Exception as e:
                 logger.error(f"Error reading {file_path}: {e}")
 
-    logger.info(f"Found {len(documents)} documents")
-    return documents
+
 
 def prepare_data_pipeline(is_ollama_embedder: bool = None):
     """
@@ -390,25 +399,36 @@ def prepare_data_pipeline(is_ollama_embedder: bool = None):
     return data_transformer
 
 def transform_documents_and_save_to_db(
-    documents: List[Document], db_path: str, is_ollama_embedder: bool = None
+    documents: Iterable[Document],
+    db_path: str,
+    is_ollama_embedder: bool = None,
+    batch_size: int = 500,
 ) -> LocalDB:
     """
-    Transforms a list of documents and saves them to a local database.
+    Transforms documents in batches and saves them to a local database.
 
     Args:
-        documents (list): A list of `Document` objects.
+        documents (Iterable[Document]): Documents to process.
         db_path (str): The path to the local database file.
         is_ollama_embedder (bool, optional): Whether to use Ollama for embedding.
                                            If None, will be determined from configuration.
+        batch_size (int, optional): Number of documents to process per batch.
     """
     # Get the data transformer
     data_transformer = prepare_data_pipeline(is_ollama_embedder)
 
-    # Save the documents to a local database
     db = LocalDB()
     db.register_transformer(transformer=data_transformer, key="split_and_embed")
-    db.load(documents)
-    db.transform(key="split_and_embed")
+
+    first = True
+    for chunk in chunked(documents, batch_size):
+        chunk_list = list(chunk)
+        if first:
+            db.load(chunk_list)
+            db.transform(key="split_and_embed")
+            first = False
+        else:
+            db.extend(chunk_list)
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
     db.save_state(filepath=db_path)
     return db
@@ -816,14 +836,17 @@ class DatabaseManager:
             excluded_dirs=excluded_dirs,
             excluded_files=excluded_files,
             included_dirs=included_dirs,
-            included_files=included_files
+            included_files=included_files,
         )
         self.db = transform_documents_and_save_to_db(
-            documents, self.repo_paths["save_db_file"], is_ollama_embedder=is_ollama_embedder
+            documents,
+            self.repo_paths["save_db_file"],
+            is_ollama_embedder=is_ollama_embedder,
         )
-        logger.info(f"Total documents: {len(documents)}")
         transformed_docs = self.db.get_transformed_data(key="split_and_embed")
-        logger.info(f"Total transformed documents: {len(transformed_docs)}")
+        logger.info(
+            f"Total transformed documents: {len(transformed_docs)}"
+        )
         return transformed_docs
 
     def prepare_retriever(self, repo_url_or_path: str, type: str = "github", access_token: str = None):
