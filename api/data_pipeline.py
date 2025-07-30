@@ -429,6 +429,11 @@ def transform_documents_and_save_to_db(
             first = False
         else:
             db.extend(chunk_list)
+
+        # Clear the raw items to avoid holding all original documents
+        # in memory. Only the transformed data (embeddings) is kept.
+        db.items = []
+
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
     db.save_state(filepath=db_path)
     return db
