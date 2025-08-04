@@ -1,6 +1,7 @@
 import logging
 import weakref
 import re
+import gc
 from dataclasses import dataclass
 from typing import Any, List, Tuple, Dict
 from uuid import uuid4
@@ -301,6 +302,37 @@ IMPORTANT FORMATTING RULES:
         self.db_manager = DatabaseManager()
         self.transformed_docs = []
 
+    def release_resources(self):
+        """Release retriever, documents and database resources."""
+        # Release retriever to allow garbage collection
+        if getattr(self, "retriever", None) is not None:
+            self.retriever = None
+
+        # Clear transformed documents
+        if getattr(self, "transformed_docs", None) is not None:
+            try:
+                self.transformed_docs.clear()
+            except Exception:
+                self.transformed_docs = []
+
+        # Close and reset database manager if it exists
+        if getattr(self, "db_manager", None):
+            try:
+                db = getattr(self.db_manager, "db", None)
+                if db is not None:
+                    close_fn = getattr(db, "close", None)
+                    if callable(close_fn):
+                        close_fn()
+                if hasattr(self.db_manager, "reset_database"):
+                    self.db_manager.reset_database()
+            except Exception as e:
+                logger.warning(f"Error releasing database resources: {e}")
+            finally:
+                self.db_manager = None
+
+        # Force garbage collection to free memory
+        gc.collect()
+
     def _validate_and_filter_embeddings(self, documents: List) -> List:
         """
         Validate embeddings and filter out documents with invalid or mismatched embedding sizes.
@@ -410,6 +442,7 @@ IMPORTANT FORMATTING RULES:
             included_dirs: Optional list of directories to include exclusively
             included_files: Optional list of file patterns to include exclusively
         """
+        self.release_resources()
         self.initialize_db_manager()
         self.repo_url_or_path = repo_url_or_path
         self.transformed_docs = self.db_manager.prepare_database(
